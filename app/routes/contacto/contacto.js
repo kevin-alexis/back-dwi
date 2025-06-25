@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const credentials = require('../../config/MySQL/index');
 const { object, string } = require('yup');
+const fetch = require('node-fetch');
 
 const router = express.Router();
 
@@ -21,13 +22,25 @@ const contactoSchema = object({
   mensaje: string()
     .trim()
     .required('El mensaje es obligatorio'),
+  recaptcha_token: string().required('Token de reCAPTCHA es obligatorio'), 
 });
 
 router.post('/api/contacto', async (req, res) => {
   try {
-    const { nombre, correo, telefono, mensaje } = await contactoSchema.validate(req.body, {
-      abortEarly: false, 
+    const { nombre, correo, telefono, mensaje, recaptcha_token } = await contactoSchema.validate(req.body, {
+      abortEarly: false,
     });
+
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptcha_token}`;
+    const response = await fetch(verificationUrl, { method: 'POST' });
+
+    const data = await response.json();
+    console.log("data:", data)
+
+    if (data.success == false) {
+      return res.status(400).json({ mensaje: 'Error en la verificación de reCAPTCHA.' });
+    }
 
     const values = [nombre, correo, telefono, mensaje];
     const connection = mysql.createConnection(credentials);
