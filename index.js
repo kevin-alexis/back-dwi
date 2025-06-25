@@ -12,15 +12,6 @@ app.use(bodyParser.json());
 // Middleware que habilitar CORS (Cross-Origin Resource Sharing) para todas las rutas
 app.use(cors());
 
-//Credenciales de MySQL
-const credentials = {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'piercings_paradise',
-    port: 3307
-}
-
 // Ruta principal
 app.get('/', (req, res) =>{
     res.send('Hola mundo!');
