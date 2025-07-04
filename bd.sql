@@ -7,7 +7,8 @@ CREATE TABLE contacto (
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL,
     telefono VARCHAR(100) NOT NULL,
-    mensaje TEXT NOT NULL
+    mensaje TEXT NOT NULL,
+    estatus ENUM('Pendiente', 'Contactado', 'Rechazado')
 );
 
 
