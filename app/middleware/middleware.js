@@ -8,7 +8,10 @@ const app = express();
 app.use(bodyParser.json());
 
 // Middleware que habilitar CORS (Cross-Origin Resource Sharing) para todas las rutas
-app.use(cors());
+app.use(cors({
+    origin: process.env.VITE_CLIENT_URL,
+    credentials: true
+}));
 
 
 

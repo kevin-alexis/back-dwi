@@ -1,11 +1,9 @@
-
 import {Router} from 'express';
-import {iniciarSesion, recuperarCuenta,iniciarSesionGoogle, cambiarContraseña} from "../controllers/cuenta/cuenta.js"
+import {iniciarSesion, crearUsuario, logout} from "../controllers/cuenta/cuenta.js"
 const router = Router()
 
-router.post('/iniciar-sesion', iniciarSesion);
-router.post('/iniciar-sesion-google', iniciarSesionGoogle);
-router.post('/recuperar-cuenta', recuperarCuenta);
-router.patch('/cambiar-password', cambiarContraseña);
+router.post('/api/iniciar-sesion', iniciarSesion);
+router.get('/api/crear-usuario', crearUsuario)
+router.post('/api/logout', logout)
 
 export default router

@@ -1,7 +1,7 @@
-import sql from 'mysql';
+import mysql from 'mysql2/promise';
 import config from './config.js';
 
-const pool = new sql.createConnection(config);
+const pool = await mysql.createConnection(config);
 pool.connect();
 
 export default pool;

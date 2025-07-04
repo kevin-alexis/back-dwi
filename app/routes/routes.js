@@ -1,12 +1,16 @@
 import express from 'express';
-import rutaPrincipal from './RutaPrincipal/principal.js';
-import contacto from './contacto/contacto.js';
+import contacto from '../controllers/contacto/contacto.js';
+import { verificarSesion } from '../controllers/session/sesion.js';
 
 
 const app = express();
 
-app.get('/', rutaPrincipal);
+app.get('/', (req, res) => {
+  res.send('Hola mundo!');
+});
+
 app.post('/api/contacto', contacto);
+app.get('/api/verificar-sesion', verificarSesion);
 
 
 export default app;

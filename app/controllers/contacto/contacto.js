@@ -1,5 +1,5 @@
 import express from 'express';
-import mysql from 'mysql';
+import mysql from 'mysql2/promise';
 import credentials from '../../config/MySQL/config.js';
 import { object, string } from 'yup';
 import fetch from 'node-fetch';
@@ -32,37 +32,33 @@ router.post('/api/contacto', async (req, res) => {
     });
 
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+
     const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptcha_token}`;
     const response = await fetch(verificationUrl, { method: 'POST' });
 
     const data = await response.json();
-    console.log("data:", data)
+    console.log("data:", data);
 
     if (data.success == false) {
       return res.status(400).json({ mensaje: 'Error en la verificación de reCAPTCHA.' });
     }
 
-    const values = [nombre, correo, telefono, mensaje];
-    const connection = mysql.createConnection(credentials);
+    const connection = await mysql.createConnection(credentials);
+    const values = [nombre, correo, telefono, mensaje, 'Pendiente'];
 
-    connection.query(
-      `INSERT INTO contacto (nombre, correo, telefono, mensaje) VALUES (?, ?, ?, ?)`,
-      values,
-      (err, result) => {
-        connection.end();
-
-        if (err) {
-          console.error('Error al insertar en la base de datos:', err);
-          return res.status(500).json({ mensaje: 'Error interno del servidor.' });
-        }
-
-        console.log('Contacto guardado con ID:', result.insertId);
-        return res.status(200).json({
-          mensaje: 'Mensaje enviado correctamente.',
-          id: result.insertId,
-        });
-      }
+    const [result] = await connection.execute(
+      `INSERT INTO contactos (nombre, correo, telefono, mensaje, estatus) VALUES (?, ?, ?, ?, ?)`,
+      values
     );
+
+    await connection.end();
+
+    console.log('Contacto guardado con ID:', result.insertId);
+    return res.status(200).json({
+      mensaje: 'Mensaje enviado correctamente.',
+      id: result.insertId,
+    });
+
   } catch (error) {
     if (error.name === 'ValidationError') {
       return res.status(400).json({
@@ -75,5 +71,6 @@ router.post('/api/contacto', async (req, res) => {
     return res.status(500).json({ mensaje: 'Error interno del servidor.' });
   }
 });
+
 
 export default router;
