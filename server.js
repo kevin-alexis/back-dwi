@@ -1,4 +1,5 @@
-const app = require('./app.js');
+import app from './app.js';
+
 const port = 8080;
 
 // Iniciar el servidor, escucha en el puerto 8080

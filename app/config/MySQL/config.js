@@ -1,4 +1,5 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const credentials = {
   host: process.env.DB_HOST,
@@ -8,4 +9,5 @@ const credentials = {
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
 };
 
-module.exports = credentials;
+export default credentials
+

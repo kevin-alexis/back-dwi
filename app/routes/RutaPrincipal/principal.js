@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 // Ruta principal
@@ -6,4 +6,4 @@ router.get('/', (req, res) => {
   res.send('Hola mundo!');
 });
 
-module.exports = router;
+export default router;

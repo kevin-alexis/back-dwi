@@ -1,8 +1,8 @@
-const express = require('express');
-const mysql = require('mysql');
-const credentials = require('../../config/MySQL/index');
-const { object, string } = require('yup');
-const fetch = require('node-fetch');
+import express from 'express';
+import mysql from 'mysql';
+import credentials from '../../config/MySQL/config.js';
+import { object, string } from 'yup';
+import fetch from 'node-fetch';
 
 const router = express.Router();
 
@@ -76,4 +76,4 @@ router.post('/api/contacto', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
